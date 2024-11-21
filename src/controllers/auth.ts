@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express';
 import { signupShema } from '../schemas/signup';
-import { findUserByEmail } from '../services/user';
+import { createUser, findUserByEmail, findUserBySlug } from '../services/user';
 import slug from 'slug';
 
 export const signup: RequestHandler = async (req, res) => {
@@ -15,6 +15,7 @@ export const signup: RequestHandler = async (req, res) => {
     return res.json({ error: 'E-mail já existe' });
   }
 
+  // verificar slug 
   let genSlug = true;
   let userSlug = slug(safeData.data.name);
   while (genSlug) {
@@ -22,11 +23,36 @@ export const signup: RequestHandler = async (req, res) => {
 
     if (hasSlug) {
       let slugSuffix = Math.floor(Math.random() * 999999).toString();
-      let userSlug = slug(safeData.data.name + slugSuffix);
+      userSlug = slug(safeData.data.name + slugSuffix);
+
     } else {
       genSlug = false;
     }
+
   }
 
-  res.json({});
+  //gerar hash de senha 
+  const hashPassword = await hash(safeData.data.password, 10);
+
+
+  // cria o usuário 
+  const newUser = await createUser({
+    slug: userSlug,
+    name: safeData.data.name,
+    email: safeData.data.email,
+    password: hashPassword
+  });
+
+  // cria o token
+  const token = '';
+
+
+  res.json(201).json({
+    token,
+    user: {
+      name: newUser.name,
+      slug: newUser.slug,
+      avatar: newUser.avatar,
+    }
+  });
 } 
