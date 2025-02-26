@@ -52,6 +52,6 @@ O servidor estará disponível em http://localhost:3000 (ou o valor da variável
 
 ## 💡 Expressões de gratidão
 
-* Link para o seu LinkedIn [Meu LinkedIn](https://br.linkedin.com/in/ribbeiroana)
+* Link para LinkedIn [Meu LinkedIn](https://br.linkedin.com/in/ribbeiroana)
 
 
